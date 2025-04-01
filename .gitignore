@@ -1,52 +1,30 @@
-# Prerequisites
-*.d
-
-# Object files
+# Keil Generated output files in the sub-directories .\Listings and .\Objects
+*.lst
 *.o
-*.ko
-*.obj
-*.elf
-
-# Linker output
-*.ilk
+*.d
+*.crf
+*.lnp
+*.axf
+*.htm
+*.build_log.htm
+*.dep
+*.iex
+*.i
+*_2i
+*.l2p
+*.fed
 *.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
 *.hex
+*.bin
+*.Bak
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+#Keil Project screen layout file
+*.uvguix.*
+*.uvgui.*
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+#JLINK file
+JLinkLog.txt
+*.dbgconf
+
+#VScode Config
+.vscode
