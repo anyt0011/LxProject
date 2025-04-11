@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "system_adaption.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -115,9 +116,13 @@ void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
+  printf("hello world\n");
+  Test_1();
+  // Test_2();
+  // Test_3();
+
   for(;;)
   {
-    printf("hello world\n");
     osDelay(500);
   }
   /* USER CODE END StartDefaultTask */

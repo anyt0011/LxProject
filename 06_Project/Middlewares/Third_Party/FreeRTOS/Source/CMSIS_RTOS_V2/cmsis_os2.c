@@ -233,7 +233,6 @@ osStatus_t osKernelGetInfo (osVersion_t *version, char *id_buf, uint32_t id_size
     }
     memcpy(id_buf, KERNEL_ID, id_size);
   }
-
   return (osOK);
 }
 
