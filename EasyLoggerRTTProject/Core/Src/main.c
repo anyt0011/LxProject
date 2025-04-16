@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "elog.h"
 #include "stdio.h"
+#include "cm_backtrace.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,7 +37,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define HARDWARE_VERSION               "V1.0.0"
+#define SOFTWARE_VERSION               "V0.1.0"
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -95,15 +97,14 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 	elog_init();
-	
 	elog_set_fmt(ELOG_LVL_ASSERT, ELOG_FMT_ALL);
 	elog_set_fmt(ELOG_LVL_ERROR, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
 	elog_set_fmt(ELOG_LVL_WARN, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
 	elog_set_fmt(ELOG_LVL_INFO, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
 	elog_set_fmt(ELOG_LVL_DEBUG, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
 	elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
-	
 	elog_start();
+  cm_backtrace_init("EasyLoggerRTTProject", HARDWARE_VERSION, SOFTWARE_VERSION);
   /* USER CODE END 2 */
 
   /* Init scheduler */

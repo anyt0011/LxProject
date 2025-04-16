@@ -1111,6 +1111,9 @@ typedef struct xSTATIC_LIST
  */
 typedef struct xSTATIC_TCB
 {
+	#if(portSTACK_GROWTH <= 0)
+	UBaseType_t     uxSizeOfStack;      /*< Support For CmBacktrace >*/
+	#endif /* ( portSTACK_GROWTH > 0 )*/
 	void				*pxDummy1;
 	#if ( portUSING_MPU_WRAPPERS == 1 )
 		xMPU_SETTINGS	xDummy2;
@@ -1131,6 +1134,7 @@ typedef struct xSTATIC_TCB
 	#if ( configUSE_MUTEXES == 1 )
 		UBaseType_t		uxDummy12[ 2 ];
 	#endif
+
 	#if ( configUSE_APPLICATION_TASK_TAG == 1 )
 		void			*pxDummy14;
 	#endif

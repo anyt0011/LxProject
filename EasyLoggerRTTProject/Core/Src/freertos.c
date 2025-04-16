@@ -59,7 +59,7 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
+void fault_test_by_div0(void);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -119,7 +119,6 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
 	static const char* TAG = "main";
   elog_i(TAG,"hello world");
-
   for(;;)
   {
     elog_i(TAG,"default task");
@@ -134,6 +133,15 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+void fault_test_by_div0(void) {
+    volatile int * SCB_CCR = (volatile int *) 0xE000ED14; // SCB->CCR
+    int x, y, z;
 
+    *SCB_CCR |= (1 << 4); /* bit4: DIV_0_TRP. */
+
+    x = 10;
+    y = 0;
+    z = x / y;
+}
 /* USER CODE END Application */
 

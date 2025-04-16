@@ -338,9 +338,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32F411xE</Define>
+              <Define>USE_HAL_DRIVER,STM32F411xE,USE_FULL_ASSERT</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\BSP\rtc;..\Components\easylogger\inc;..\Components\segger_rtt_v784f\Config;..\Components\segger_rtt_v784f\RTT;..\Components\bcd_hex_converter</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\BSP\rtc;..\Components\easylogger\inc;..\Components\segger_rtt_v784f\Config;..\Components\segger_rtt_v784f\RTT;..\Components\bcd_hex_converter;..\Components\cmbacktrace;..\Components\cmbacktrace\Languages\en-US;..\Components\cmbacktrace\Languages\zh-CN</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -648,6 +648,21 @@
               <FileName>bcd_hex_converter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Components\bcd_hex_converter\bcd_hex_converter.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Components/CmBacktrace</GroupName>
+          <Files>
+            <File>
+              <FileName>cm_backtrace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\cmbacktrace\cm_backtrace.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmb_fault.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\Components\cmbacktrace\fault_handler\keil\cmb_fault.S</FilePath>
             </File>
           </Files>
         </Group>
