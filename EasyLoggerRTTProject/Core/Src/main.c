@@ -28,6 +28,7 @@
 #include "elog.h"
 #include "stdio.h"
 #include "cm_backtrace.h"
+#include "unity.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,6 +62,35 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void setUp(void){
+
+}
+
+void tearDown(void){
+
+}
+
+int div_func(const int a, const int b){
+  if(0==b){
+    return -1;
+  }
+  return a/b;
+}
+
+void test_func(void){
+    TEST_ASSERT_EQUAL_INT(2,div_func(2,1));
+}
+
+void test_zero_catch(void){
+  TEST_ASSERT_EQUAL_INT(-2,div_func(2,0));
+}
+
+void test_unity(void){
+  UNITY_BEGIN();
+  RUN_TEST(test_func);
+  RUN_TEST(test_zero_catch);
+  UNITY_END();
+}
 
 /* USER CODE END 0 */
 
@@ -105,6 +135,7 @@ int main(void)
 	elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
 	elog_start();
   cm_backtrace_init("EasyLoggerRTTProject", HARDWARE_VERSION, SOFTWARE_VERSION);
+  test_unity();
   /* USER CODE END 2 */
 
   /* Init scheduler */

@@ -121,10 +121,9 @@ void StartDefaultTask(void *argument)
   elog_i(TAG,"hello world");
   for(;;)
   {
-    elog_i(TAG,"default task");
-    elog_raw("Task '%s' Stack High Water Mark: %u words\n", 
-          pcTaskGetName(NULL), 
-          uxTaskGetStackHighWaterMark(NULL));
+    // elog_raw("Task '%s' Stack High Water Mark: %u words\n", 
+    //       pcTaskGetName(NULL), 
+    //       uxTaskGetStackHighWaterMark(NULL));
 
     osDelay(500);
   }
