@@ -9,6 +9,11 @@
 #include "main.h"
 #include "tim.h"
 #include "gpio.h"
+#include "flash.h"
+#include "usart.h"
+
+#define LOG_TAG "bootloader"
+#include "elog.h"
 // 全局定义 STM32F411xE 或者 STM32F401xx
 // 当前定义 STM32F411xE
 
@@ -21,13 +26,40 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define APP_FLASH_ADDR             (0x8010000)
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static __IO uint32_t uwTimingDelay;
 RCC_ClocksTypeDef RCC_Clocks;
 
 /* Private function prototypes -----------------------------------------------*/
+typedef void (*pf_app_t)(void);
 
+void jump_to_app(void)
+{
+  uint32_t jump_address;
+  pf_app_t jump_to_application;
+
+  /* 检查栈顶地址是否合法 */
+  if(((*(__IO uint32_t *)APP_FLASH_ADDR) & 0x2FFE0000) == 0x20000000)
+  {
+    /* 屏蔽所有中断，防止在跳转过程中，中断干扰出现异常 */
+    __disable_irq();
+
+    /* 用户代码区第二个 字 为程序开始地址(复位地址) */
+    jump_address = *(__IO uint32_t *) (APP_FLASH_ADDR + 4);
+
+    /* Initialize user application's Stack Pointer */
+    /* 初始化APP堆栈指针(用户代码区的第一个字用于存放栈顶地址) */
+    __set_MSP(*(__IO uint32_t *) APP_FLASH_ADDR);
+
+    /* 类型转换 */
+    jump_to_application = (pf_app_t) jump_address;
+
+    /* 跳转到 APP */
+    jump_to_application();
+  }
+}
 /* Private functions ---------------------------------------------------------*/
  /*
   *power by WeAct Studio
@@ -57,47 +89,34 @@ int main(void)
   RCC_GetClocksFreq(&RCC_Clocks);
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
   
+	key_io_init();
+	led_io_init();
+	
+	USART1_Init();
 	
   /* Add your application code here */
+	elog_init();
+  /* set EasyLogger log format */
+  elog_set_fmt(ELOG_LVL_ASSERT, ELOG_FMT_ALL);
+  elog_set_fmt(ELOG_LVL_ERROR, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+  elog_set_fmt(ELOG_LVL_WARN, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+  elog_set_fmt(ELOG_LVL_INFO, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+  elog_set_fmt(ELOG_LVL_DEBUG, ELOG_FMT_ALL & ~(ELOG_FMT_FUNC | ELOG_FMT_T_INFO | ELOG_FMT_P_INFO));
+  elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL & ~(ELOG_FMT_FUNC | ELOG_FMT_T_INFO | ELOG_FMT_P_INFO));
+  /* start EasyLogger */
+  elog_start();
+	
   /* Insert 50 ms delay */
   Delay(50);
-	
-  GPIO_Config();
-  TIM_Config();   
+
   /* Infinite loop */
   while (1)
   {
-#if soft_pwm
-		/* C13 呼吸灯测试 */
-		static uint8_t pwmset;
-		static uint16_t time;
-		static uint8_t timeflag;
-		static uint8_t timecount;
-
-		 /* 呼吸灯 */
-		if(timeflag == 0)
-		{
-			time ++;
-			if(time >= 1600) timeflag = 1;
-		}
-		else
-		{
-			time --;
-			if(time == 0) timeflag = 0;
-		}
-
-		/* 占空比设置 */
-		pwmset = time/80;
-
-		/* 20ms 脉宽 */
-		if(timecount > 20) timecount = 0;
-		else timecount ++;
-
-		if(timecount >= pwmset ) GPIO_SetBits(LED_C13_PORT,LED_C13_PIN);
-		else GPIO_ResetBits(LED_C13_PORT,LED_C13_PIN);
-		
-		Delay(1);
-#endif
+			if('a' == USART_ReceiveChar(USART1)){
+				log_i("receive 'a'");
+				USART_SendChar(USART1,'C');
+			}
+			breathing_light();
 	}
 }
 
