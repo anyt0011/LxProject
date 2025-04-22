@@ -11,6 +11,7 @@
 #include "gpio.h"
 #include "flash.h"
 #include "usart.h"
+#include "ymodem.h"
 
 #define LOG_TAG "bootloader"
 #include "elog.h"
@@ -27,13 +28,59 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define APP_FLASH_ADDR             (0x8010000)
+// #define APP_FLASH_ADDR             (0x0803D000)
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static __IO uint32_t uwTimingDelay;
 RCC_ClocksTypeDef RCC_Clocks;
+uint8_t tab_1024[1029];
 
 /* Private function prototypes -----------------------------------------------*/
 typedef void (*pf_app_t)(void);
+
+#define RCC_OFFSET                 (RCC_BASE - PERIPH_BASE)
+#define RCC_BDCR_OFFSET            (RCC_OFFSET + 0x70U)
+#define RCC_RTCEN_BIT_NUMBER       0x0FU
+#define RCC_BDCR_RTCEN_BB          (PERIPH_BB_BASE + (RCC_BDCR_OFFSET * 32U) + (RCC_RTCEN_BIT_NUMBER * 4U))
+void system_deinit(void)
+{
+  /* Reset of all peripherals */
+  (RCC->APB1RSTR = 0x10E2C80FU);
+  (RCC->APB1RSTR = 0x00U);
+
+  (RCC->APB2RSTR = 0x00177931U);
+  (RCC->APB2RSTR = 0x00U);
+
+  (RCC->AHB1RSTR = 0x0060109FU);
+  (RCC->AHB1RSTR = 0x00U);
+
+  (RCC->AHB2RSTR = 0x00000080U);
+  (RCC->AHB2RSTR = 0x00U);
+
+  (RCC->AHB3RSTR = 0xFFFFFFFFU);
+  (RCC->AHB3RSTR = 0x00U) ;
+
+  (*(__IO uint32_t *) RCC_BDCR_RTCEN_BB = DISABLE);
+
+  RCC->CR |= (uint32_t)0x00000001;
+
+  /* Reset CFGR register */
+  RCC->CFGR = 0x00000000;
+
+  /* Reset HSEON, CSSON and PLLON bits */
+  RCC->CR &= (uint32_t)0xFEF6FFFF;
+
+  /* Reset PLLCFGR register */
+  RCC->PLLCFGR = 0x24003010;
+
+  /* Reset HSEBYP bit */
+  RCC->CR &= (uint32_t)0xFFFBFFFF;
+
+  /* Disable all interrupts */
+  RCC->CIR = 0x00000000;
+  /* De-Init the low level hardware */
+  
+}
 
 void jump_to_app(void)
 {
@@ -59,7 +106,9 @@ void jump_to_app(void)
     /* 跳转到 APP */
     jump_to_application();
   }
+  return;
 }
+
 /* Private functions ---------------------------------------------------------*/
  /*
   *power by WeAct Studio
@@ -76,6 +125,7 @@ int main(void)
 {
 	/* Enable Clock Security System(CSS): this will generate an NMI exception
      when HSE clock fails *****************************************************/
+	SCB->VTOR=0x8000000 | 0x0;
   RCC_ClockSecuritySystemCmd(ENABLE);
 	
  /*!< At this stage the microcontroller clock setting is already configured, 
@@ -108,15 +158,24 @@ int main(void)
 	
   /* Insert 50 ms delay */
   Delay(50);
+	log_i("cycle:%d",RCC_Clocks.HCLK_Frequency);
+	if(1 == key_scan())
+  {
+		log_i("waiting for app");
+    Ymodem_Receive(tab_1024);
+  }else{
+    log_i("bootloader not updata app");
+  }
+	
+  log_i("system deinit");
+  log_i("jump to app");
+	system_deinit();
+  jump_to_app();
 
-  /* Infinite loop */
   while (1)
   {
-			if('a' == USART_ReceiveChar(USART1)){
-				log_i("receive 'a'");
-				USART_SendChar(USART1,'C');
-			}
-			breathing_light();
+
+		
 	}
 }
 
