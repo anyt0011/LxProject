@@ -56,9 +56,15 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-
+osThreadId_t appTaskHandle;
+const osThreadAttr_t appTask_attributes = {
+  .name = "appTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+void AppTask(void *arg);
 void fault_test_by_div0(void);
 /* USER CODE END FunctionPrototypes */
 
@@ -97,7 +103,7 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-
+	appTaskHandle = osThreadNew(AppTask, NULL, &appTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -126,13 +132,24 @@ void StartDefaultTask(void *argument)
           pcTaskGetName(NULL), 
           uxTaskGetStackHighWaterMark(NULL));
 
-    osDelay(500);
+    osDelay(1500);
   }
   /* USER CODE END StartDefaultTask */
 }
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+void AppTask(void *arg)
+{
+	static const char* TAG = "app";
+  elog_i(TAG,"hello world");
+  for(;;)
+  {
+    elog_i(TAG,"app task");
+    osDelay(1000);
+  }
+}
+
 void fault_test_by_div0(void) {
     volatile int * SCB_CCR = (volatile int *) 0xE000ED14; // SCB->CCR
     int x, y, z;

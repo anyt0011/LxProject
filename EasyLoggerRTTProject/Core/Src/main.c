@@ -28,6 +28,8 @@
 #include "elog.h"
 #include "stdio.h"
 #include "cm_backtrace.h"
+#include "SEGGER_SYSVIEW.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,6 +98,7 @@ int main(void)
   MX_RTC_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	SEGGER_SYSVIEW_Conf(); /* Configure and initialize SystemView */ 
 	elog_init();
 	elog_set_fmt(ELOG_LVL_ASSERT, ELOG_FMT_ALL);
 	elog_set_fmt(ELOG_LVL_ERROR, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
