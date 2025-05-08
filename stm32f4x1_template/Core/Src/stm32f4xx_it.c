@@ -139,9 +139,11 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
+extern volatile uint32_t SysTickUptime  ;
 void SysTick_Handler(void)
 {
-  TimingDelay_Decrement();
+  //TimingDelay_Decrement();
+  SysTickUptime++ ;
 }
 
 /******************************************************************************/

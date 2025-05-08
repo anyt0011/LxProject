@@ -23,18 +23,13 @@
  *****************************************************************************/
 /* Includes ------------------------------------------------------------------*/
 #include "ymodem.h"
-#include "common.h"
-#define LOG_TAG "ymodem"
-#include "elog.h"
-#include "flash.h"
-#include "stm32f4xx.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint8_t file_name[FILE_NAME_LENGTH];
 uint32_t FlashDestination = BackAppAddress; 
-// uint16_t PageSize = PAGE_SIZE;
+//uint16_t PageSize = PAGE_SIZE;
 uint32_t EraseCounter = 0x0;
 uint32_t NbrOfPage = 0;
 FLASH_Status FLASHStatus = FLASH_COMPLETE;
@@ -133,6 +128,15 @@ static int32_t Receive_Packet (uint8_t *data, int32_t *length, uint32_t timeout)
   {
     return -1;
   }
+
+  //CRC校验
+  uint16_t u16_CrcCheckData = crc_xmodem((data + PACKET_HEADER),packet_size);
+  uint16_t u16_CrcReceiveData = *(data + PACKET_HEADER + packet_size) << 8;
+  u16_CrcReceiveData += *(data + PACKET_HEADER + packet_size + 1);
+  if(u16_CrcCheckData != u16_CrcReceiveData)
+  {
+    return -1;
+  }
   *length = packet_size;
   return 0;
 }
@@ -145,10 +149,10 @@ static int32_t Receive_Packet (uint8_t *data, int32_t *length, uint32_t timeout)
 int32_t Ymodem_Receive (uint8_t *buf)
 {
   uint8_t packet_data[PACKET_1K_SIZE + PACKET_OVERHEAD], file_size[FILE_SIZE_LENGTH], *file_ptr, *buf_ptr;
-  int32_t i, j, packet_length, session_done, file_done, packets_received, errors, session_begin, size = 0;
+  int32_t i, packet_length, session_done, file_done, packets_received, errors, session_begin, size = 0;
 
   /* Initialize FlashDestination variable */
-  //FlashDestination = BackAppAddress;
+  FlashDestination = BackAppAddress;
 
   for (session_done = 0, errors = 0, session_begin = 0; ;)//初始化变量，进入循环
   {
@@ -188,6 +192,7 @@ int32_t Ymodem_Receive (uint8_t *buf)
                       file_name[i++] = *file_ptr++;
                     }
                     file_name[i++] = '\0';
+                    //获取文件大小
                     for (i = 0, file_ptr ++; (*file_ptr != ' ') && (i < FILE_SIZE_LENGTH);)
                     {
                       file_size[i++] = *file_ptr++;
@@ -204,17 +209,24 @@ int32_t Ymodem_Receive (uint8_t *buf)
                       Send_Byte(CA);
                       return -1;
                     }
-
-                    /* Erase the needed sector where the user application will be loaded */
-                    uint8_t flash_state = Flash_erase(BackAppAddress,size);
-                    if (1 == flash_state)
-                    {
-                      /* End session */
-                      Send_Byte(CA);
-                      Send_Byte(CA);
-                      log_e("erase flash failed");
-                      return -1;
-                    }
+#ifndef EXTERN_Flash
+//                    uint8_t flash_state = Flash_erase(BackAppAddress,size);
+//                    if (1 == flash_state)
+//                    {
+//                      /* End session */
+//                      Send_Byte(CA);
+//                      Send_Byte(CA);
+//                      return -1;
+//                    }
+#else
+                    // if(1 == W25Q64_EraseChip())
+                    // {
+                    //   //擦除失败，停止此次升级
+                    //   Send_Byte(CA);
+                    //   Send_Byte(CA);
+                    //   return -1;
+                    // }
+#endif
                     Send_Byte(ACK);
                     Send_Byte(CRC16);
                   }
@@ -230,29 +242,10 @@ int32_t Ymodem_Receive (uint8_t *buf)
                 /* Data packet */
                 else
                 {
+//                  uint8_t char_str = 0;;
                   memcpy(buf_ptr, packet_data + PACKET_HEADER, packet_length);
-                  log_i("len = %d", packet_length);
-                  /*写入Flash了
-                    下载地址：ApplicationAddress
-                    写入函数：Flash_Write(addr,u32_data);
-                  */
-                  RamSource = (uint32_t)buf;
-                  for (j = 0;(j < packet_length) && (FlashDestination <  BackAppAddress + size);j += 4)
-                  {
-                    
-                    Flash_Write(FlashDestination,*(uint32_t*)RamSource);
-                    //写完之后校验一下，是否写入
-                    if (*(uint32_t*)FlashDestination != *(uint32_t*)RamSource)
-                    {
-                      /* End session */
-                      Send_Byte(CA);
-                      Send_Byte(CA);
-                      log_e("erase write failed");
-                      return -2;
-                    }
-                    FlashDestination += 4;
-                    RamSource += 4;
-                  }
+                  log_i("length = %d", packet_length);
+                  W25Q64_WriteData(buf,packet_length,BLOCK_1);
                   Send_Byte(ACK);
                 }
                 packets_received ++;

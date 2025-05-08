@@ -48,7 +48,7 @@ uint8_t key_scan(void)
 {
     if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0) == Bit_RESET)
     {
-      Delay(50);
+      delay_ms(50);
       if(GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_0) == Bit_RESET)
       {
         return 1;
@@ -100,6 +100,6 @@ void breathing_light(void)
 		if(timecount >= pwmset ) GPIO_SetBits(LED_C13_PORT,LED_C13_PIN);
 		else GPIO_ResetBits(LED_C13_PORT,LED_C13_PIN);
 		
-		Delay(1);
+		delay_ms(1);
 }
 

@@ -27,7 +27,7 @@ typedef  void (*pFunction)(void);
 
 #define BackAppAddress     0x08040000   //下载的升级包存储位置
 
-#define ApplicationAddress 0x08010000   //运行的APP存储位置
+#define ApplicationAddress 0x08008000   //运行的APP存储位置
 
 // #if defined (STM32F10X_MD) || defined (STM32F10X_MD_VL)
 // #define PAGE_SIZE                         (0x400)    /* 1 Kbyte */

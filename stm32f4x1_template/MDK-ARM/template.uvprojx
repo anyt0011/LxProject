@@ -81,9 +81,9 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>1</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name>fromelf.exe --bin -o "$l@l.bin" "#l"</UserProg1Name>
-            <UserProg2Name></UserProg2Name>
+            <UserProg2Name>.\keil-build-viewer.exe</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
             <nStopA1X>0</nStopA1X>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F411xE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\MDK-ARM;..\Core\Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\Drivers\CMSIS\Include;..\Components\easylogger\inc;..\BSP;..\Components\ymodem;..\Components\RTT;..\Components\AES;..\BSP\W25Q64;..\BSP\AT24CXX\AT24Cxx_Driver</IncludePath>
+              <IncludePath>..\MDK-ARM;..\Core\Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\Drivers\CMSIS\Include;..\Components\easylogger\inc;..\BSP;..\Components\ymodem;..\Components\RTT;..\Components\AES;..\BSP\W25Q64;..\BSP\AT24CXX\AT24Cxx_Driver;..\Components\CRC\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -423,6 +423,16 @@
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>bootloader_logic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\bootloader_logic.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\Iwdg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1713,7 +1723,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>AES</GroupName>
+          <GroupName>Components/CRC</GroupName>
+          <Files>
+            <File>
+              <FileName>crcccitt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\CRC\src\crcccitt.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Components/AES</GroupName>
           <Files>
             <File>
               <FileName>AES.c</FileName>

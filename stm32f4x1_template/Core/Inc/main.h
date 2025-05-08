@@ -32,8 +32,25 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 #include "stdio.h"
+#include "spi.h"
+#include "tim.h"
+#include "gpio.h"
+#include "flash.h"
+#include "usart.h"
+#include "ymodem.h"
+#include "common.h"
+#include "elog.h"
+#include "common.h"
+#include "AES.h"
 #include "systim.h"
 #include "spi.h"
+#include "AT24Cxx_Driver.h"
+#include "W25Q_Handler.h"
+#include "bootloader_logic.h"
+#include "iwdg.h"
+#include "checksum.h"
+#include "w25qxx.h"
+
 #define soft_pwm  (0)
 #define LED_C13_PORT GPIOC
 #define LED_C13_PIN  GPIO_Pin_13
