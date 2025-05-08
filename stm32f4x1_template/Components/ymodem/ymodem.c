@@ -206,7 +206,7 @@ int32_t Ymodem_Receive (uint8_t *buf)
                     }
 
                     /* Erase the needed sector where the user application will be loaded */
-                    uint8_t flash_state = Flash_erase(ApplicationAddress,size);
+                    uint8_t flash_state = Flash_erase(BackAppAddress,size);
                     if (1 == flash_state)
                     {
                       /* End session */
@@ -231,16 +231,13 @@ int32_t Ymodem_Receive (uint8_t *buf)
                 else
                 {
                   memcpy(buf_ptr, packet_data + PACKET_HEADER, packet_length);
-                  // log_i("length = %d", packet_length);
-                  // log_i("length = aaa");
-                  log_i("len = %u", &packet_length);
-                  log_i("length = %d", packet_length);
+                  log_i("len = %d", packet_length);
                   /*写入Flash了
                     下载地址：ApplicationAddress
                     写入函数：Flash_Write(addr,u32_data);
                   */
                   RamSource = (uint32_t)buf;
-                  for (j = 0;(j < packet_length) && (FlashDestination <  ApplicationAddress + size);j += 4)
+                  for (j = 0;(j < packet_length) && (FlashDestination <  BackAppAddress + size);j += 4)
                   {
                     
                     Flash_Write(FlashDestination,*(uint32_t*)RamSource);

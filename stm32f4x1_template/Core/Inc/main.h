@@ -31,7 +31,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
-
+#include "stdio.h"
+#include "systim.h"
+#include "spi.h"
 #define soft_pwm  (0)
 #define LED_C13_PORT GPIOC
 #define LED_C13_PIN  GPIO_Pin_13

@@ -25,8 +25,7 @@ typedef  void (*pFunction)(void);
 //* 宏 ------------------------------------------------------------------------*/
 #define CMD_STRING_SIZE       128
 
-// #define BackAppAddress     0x0803D000   //下载的升级包存储位置
-#define BackAppAddress     (0x8010000)
+#define BackAppAddress     0x08040000   //下载的升级包存储位置
 
 #define ApplicationAddress 0x08010000   //运行的APP存储位置
 

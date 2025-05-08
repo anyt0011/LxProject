@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F411xE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\MDK-ARM;..\Core\Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\Drivers\CMSIS\Include;..\Components\easylogger\inc;..\BSP;..\Components\ymodem;..\Components\RTT</IncludePath>
+              <IncludePath>..\MDK-ARM;..\Core\Inc;..\Drivers\STM32F4xx_StdPeriph_Driver\inc;..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\Drivers\CMSIS\Include;..\Components\easylogger\inc;..\BSP;..\Components\ymodem;..\Components\RTT;..\Components\AES;..\BSP\W25Q64;..\BSP\AT24CXX\AT24Cxx_Driver</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -414,6 +414,16 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Src\usart.c</FilePath>
             </File>
+            <File>
+              <FileName>systim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\systim.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -476,6 +486,31 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\system_stm32f4xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_StdPeriph_Driver\src\misc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_rcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_flash.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1678,7 +1713,44 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>BSP</GroupName>
+          <GroupName>AES</GroupName>
+          <Files>
+            <File>
+              <FileName>AES.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\AES\AES.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP/Flash</GroupName>
+          <Files>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\W25Q64\w25qxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>W25Q_Handler.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\W25Q64\W25Q_Handler.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP/AT24Cxx</GroupName>
+          <Files>
+            <File>
+              <FileName>AT24Cxx_Driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\AT24CXX\AT24Cxx_Driver\AT24Cxx_Driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>iic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\AT24CXX\AT24Cxx_Driver\iic.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
