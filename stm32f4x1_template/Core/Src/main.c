@@ -34,6 +34,10 @@ uint8_t tab_1024[1029];
 //                        0x31,0X32,0x31,0X32,0x31,0X32,0x31,0X32,0x31,0X32,0x31,0X32,0x31,0X32,0x31,0X32};
 unsigned char IV[17]="1234123412341234";  
 unsigned char Key[33]="12341234123412341234123412341234"; 
+
+uint32_t g_JumpInit __attribute__((at(0x2001FFFC), zero_init));
+//uint32_t g_JumpInit __attribute__((used, section("noinit")));
+uint32_t *p_flash_flag = 0x8070000;
 /* Private function prototypes -----------------------------------------------*/
 
 #define RCC_OFFSET                 (RCC_BASE - PERIPH_BASE)
@@ -80,7 +84,6 @@ void system_deinit(void)
   
 }
 
-
 /* Private functions ---------------------------------------------------------*/
  /**
   * @brief  Main program
@@ -90,14 +93,27 @@ void system_deinit(void)
 #define test
 int main(void)
 {
-  // 配置系统时钟
-  SystemInit();
-
-  /* Init Systick */
+	/* Init Systick */
   Delay_Init();
-
   /* Init Key */
   key_io_init();
+	if(1 != key_scan())
+	{
+		if(g_JumpInit == 0x55)
+		{
+			IWDG_Init(IWDG_Prescaler_64,3000);
+			jump_to_app();
+		}
+		else
+		{
+			//判断falsh固定地址
+			if(*p_flash_flag == 0x55)
+			{
+				jump_to_app();
+			}
+		}
+	}
+  Flash_erase(0x8070000,4);
 
   /* Init LED */
   led_io_init();
@@ -147,11 +163,10 @@ int main(void)
 ////	 Set_Block_Parameter(block_index,100);
 //	 log_i("block%d size:%d",block_index,Read_Block_size(block_index));
 
+log_i("Boot mode");
 #ifdef test
-u8_app_state_flag = 0;
 	if(1 == key_scan())
   {
-		jump_to_app();
 		u8_app_state_flag = 0;
 	}
 #endif
@@ -184,18 +199,21 @@ u8_app_state_flag = 0;
             ee_WriteBytes(&flag,16,1);
             //写入Page 3 为当前App的size
             ee_WriteBytes((uint8_t *)&app_size,24,4);
-            jump_to_app();
+            g_JumpInit = 0x55;
+            NVIC_SystemReset();
           }
         }
         else
         {
-          jump_to_app();
+          g_JumpInit = 0x55;
+          NVIC_SystemReset();
         }
       break;
 
       case 0x11:
           //直接进行跳转
-          jump_to_app();
+          g_JumpInit = 0x55;
+          NVIC_SystemReset();
       break;
 
       case 0x22:
@@ -214,7 +232,9 @@ u8_app_state_flag = 0;
           //写入Page 3 为当前App的size
           ee_WriteBytes((uint8_t *)&app_size,24,4);
 
-					jump_to_app();
+					g_JumpInit = 0x55;
+          NVIC_SystemReset();
+          
       break;
 
       case 0x33:
@@ -224,7 +244,8 @@ u8_app_state_flag = 0;
       Write_Flash_From_ExternFlashA(app_data_size);
       u8_ota_state_flag = 0x00;
       ee_WriteBytes(&u8_ota_state_flag,0,1);
-      jump_to_app();
+      g_JumpInit = 0x55;
+      NVIC_SystemReset();
       break;
       default:
       //No action
@@ -234,21 +255,15 @@ u8_app_state_flag = 0;
   else
   {
     app_data_size = Ymodem_Receive(tab_1024);
-		log_i("ymodem receive size:%d", app_data_size);
     if(app_data_size > 0)
     {
       //把剩余数据也写进去 A区写完之后
       W25Q64_WriteData_End(BLOCK_1);
-	    log_i("block1 size:%d",Read_Block_size(BLOCK_1));
       //把数据解密后搬运到B区
-//			Erase_Flash_Block(BLOCK_2);
-			log_i("block2 size:%d",Read_Block_size(BLOCK_2));
       Write_ExternFlashB_After_AES_Decode(IV,Key);
-			log_i("block2 size:%d",Read_Block_size(BLOCK_2));
       //把B区数据搬运到内部flash
       app_size = Write_Flash_From_ExternFlashB();
-			log_i("app size: %d", app_size);
-      
+      log_i("app size: %d", app_size);
       //写入Page 0 为 0x00
       ee_WriteBytes(&flag,0,1);
       //写入Page 2 为 0x00
@@ -259,13 +274,13 @@ u8_app_state_flag = 0;
       u8_ota_state_flag = 0x33;
       ee_WriteBytes(&u8_ota_state_flag,0,1);
       //新的App跳转
-      IWDG_Init(IWDG_Prescaler_64,2000);
-      jump_to_app();
+      g_JumpInit = 0x55;
+      NVIC_SystemReset();
     }
   }
 #if 0 
   int32_t app_data_size = 0;
-  if(1 == Key_Scan())
+  if(1 == key_scan())
   {
     app_data_size = Ymodem_Receive(tab_1024);
     //Back flash to App flash
@@ -309,12 +324,14 @@ u8_app_state_flag = 0;
 				ee_WriteBytes(&flag,16,1);
 				//写入Page 3 为当前App的size
 				ee_WriteBytes((uint8_t *)&app_size,24,4);
-				jump_to_app();
+				//新的App跳转
+				g_JumpInit = 0x55;
+				NVIC_SystemReset();
 			}
 		}
 #if 0
     /* 测试Ymodem */
-    if(1 == Key_Scan())
+    if(1 == key_scan())
 		  Ymodem_Receive(tab_1024);
     /* 测试串口 */
 		if('a' == USART_ReceiveChar(USART1))
@@ -329,6 +346,7 @@ u8_app_state_flag = 0;
 #endif
 	}
 }
+
 
 /**
   * @brief  Inserts a delay time.

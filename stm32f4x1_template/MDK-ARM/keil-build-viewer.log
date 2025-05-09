@@ -2,12 +2,12 @@
 =================================================== keil-build-viewer v1.5b ==================================================
  
 [Search keil project] 1 item(s)
-	c:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\template.uvprojx
+	C:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\template.uvprojx
 
 [User input] 
-[Current folder] c:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM
+[Current folder] C:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM
 [Encoding] 936
-[Keil project path] c:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\template.uvprojx
+[Keil project path] C:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\template.uvprojx
 [Keil project name] template.uvprojx
 [Is keil v4] 0
 [target name] STM32F4x1
@@ -21,7 +21,7 @@
 [Is has pack] 1
 [Is enbale LTO] 0
 [Is has user library] 0
-[Is custom scatter file] 0
+[Is custom scatter file] 1
 
 [template.uvprojx]  [STM32F4x1]  [STM32F411CEUx]
  
@@ -57,14 +57,18 @@ object 'stm32f4xx_gpio.c' rename to 'stm32f4xx_gpio_1.o'
 object 'stm32f4xx_rcc.c' rename to 'stm32f4xx_rcc_1.o'
 object 'stm32f4xx_spi.c' rename to 'stm32f4xx_spi_1.o'
 object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
-[map file path] c:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\Listings\template.map
+[map file path] C:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\Listings\template.map
 
 [region info]
 [load region] LR_IROM1
-	[execution region] ER_IROM1, 0x08000000, 0x00010000, 0x00005784 [memory type] 2 [memory ID] 3
+	[execution region] ER_IROM1, 0x08000000, 0x00008000, 0x000056B8 [memory type] 2 [memory ID] 3
 
-	[execution region] RW_IRAM1, 0x20000000, 0x00020000, 0x00007660 [memory type] 1 [memory ID] 2
-		[ZI block] addr: 0x200000BC, size: 0x000075A4 (30116)
+	[execution region] RW_IRAM1, 0x20000000, 0x0001FFFC, 0x00007668 [memory type] 1 [memory ID] 2
+		[ZI block] addr: 0x200000C4, size: 0x000075A4 (30116)
+
+[load region] LR$$.ARM.__AT_0x2001FFFC
+	[execution region] ER$$.ARM.__AT_0x2001FFFC, 0x2001FFFC, 0x00000004, 0x00000004 [memory type] 1 [memory ID] 2
+		[ZI block] addr: 0x2001FFFC, size: 0x00000004 (4)
 
 
 [object name max length] 25
@@ -84,7 +88,6 @@ object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
 [object name] iic.o                      [path] ..\BSP\AT24CXX\AT24Cxx_Driver\iic.c
 [object name] iwdg.o                     [path] ..\Core\Src\Iwdg.c
 [object name] main.o                     [path] ..\Core\Src\main.c
-[object name] misc_1.o                   [path] ..\Drivers\STM32F4xx_StdPeriph_Driver\src\misc.c
 [object name] segger_rtt.o               [path] ..\Components\RTT\SEGGER_RTT.c
 [object name] spi.o                      [path] ..\Core\Src\spi.c
 [object name] startup_stm32f411xe.o      [path] .\startup_stm32f411xe.s
@@ -176,14 +179,16 @@ object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
 
 [record region info]
 [load region] LR_IROM1
-	[execution region] ER_IROM1, 0x08000000, 0x00010000, 0x00005784 [type] 2 [ID] 3
-	[execution region] RW_IRAM1, 0x20000000, 0x00020000, 0x00007660 [type] 1 [ID] 2
+	[execution region] ER_IROM1, 0x08000000, 0x00008000, 0x000056B8 [type] 2 [ID] 3
+	[execution region] RW_IRAM1, 0x20000000, 0x0001FFFC, 0x00007668 [type] 1 [ID] 2
+[load region] LR$$.ARM.__AT_0x2001FFFC
+	[execution region] ER$$.ARM.__AT_0x2001FFFC, 0x2001FFFC, 0x00000004, 0x00000004 [type] 1 [ID] 2
 -------------------------------------------------------------------------------------------------------------------------------
                                  FILE(s)                                |         RAM (byte)       |       FLASH (byte)       |
 -------------------------------------------------------------------------------------------------------------------------------
 ..\Components\AES\AES.c():                                              |         256              |        1566              |
 ..\BSP\AT24CXX\AT24Cxx_Driver\AT24Cxx_Driver.c():                       |           0              |         262              |
-..\Core\Src\bootloader_logic.c():                                       |           0              |        1146              |
+..\Core\Src\bootloader_logic.c():                                       |           0              |        1142              |
 ..\Components\ymodem\common.c():                                        |           0              |         368              |
 ..\Components\CRC\src\crcccitt.c():                                     |         513              |         191              |
 ..\Components\easylogger\src\elog.c():                                  |        1216              |        3184              |
@@ -193,8 +198,7 @@ object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
 ..\Core\Src\gpio.c():                                                   |           0              |         144              |
 ..\BSP\AT24CXX\AT24Cxx_Driver\iic.c():                                  |           0              |         578              |
 ..\Core\Src\Iwdg.c():                                                   |           0              |          36              |
-..\Core\Src\main.c():                                                   |        1099              |         971              |
-..\Drivers\STM32F4xx_StdPeriph_Driver\src\misc.c():                     |           0  [NEW]       |           0  [NEW]       |
+..\Core\Src\main.c():                                                   |        1109              |         957              |
 ..\Components\RTT\SEGGER_RTT.c():                                       |       10424              |         587              |
 ..\Core\Src\spi.c():                                                    |           0              |         620              |
 .\startup_stm32f411xe.s():                                              |        8192              |         444              |
@@ -202,10 +206,10 @@ object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
 ..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_gpio.c():           |           0              |         250              |
 ..\Core\Src\stm32f4xx_it.c():                                           |           0              |          72              |
 ..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_iwdg.c():           |           0              |          68              |
-..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c():            |          16              |         376              |
+..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_rcc.c():            |          16              |         436              |
 ..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_spi.c():            |           0              |         118              |
 ..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_tim.c():            |           0              |          40              |
-..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c():          |           0              |         528              |
+..\Drivers\STM32F4xx_StdPeriph_Driver\src\stm32f4xx_usart.c():          |           0              |         288              |
 ..\Core\Src\system_stm32f4xx.c():                                       |          20              |         356              |
 ..\Core\Src\systim.c():                                                 |          12              |         164              |
 ..\Core\Src\tim.c():                                                    |           6              |         162              |
@@ -216,16 +220,22 @@ object 'stm32f4xx_flash.c' rename to 'stm32f4xx_flash_1.o'
 -------------------------------------------------------------------------------------------------------------------------------
 [memory print mode]: 0
 LR_IROM1
-        RAM 1             [0x20000000 | 0x00020000 (131072)]
+        RAM 1                             [0x20000000 | 0x00020000 (131072)]
                 [zi start] 1   [zi end] 11
-                RW_IRAM1  [0x20000000]|¡ö¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ_______________________________________| (  29.5 KB / 128.0 KB )  23.1%  
+                RW_IRAM1                  [0x20000000]|¡ö¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ_______________________________________| (  29.6 KB / 127.9 KB )  23.1%  
  
-        FLASH 1           [0x08000000 | 0x00080000 (524288)]
-                ER_IROM1  [0x08000000]|¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö_________________________________| (  21.8 KB /  64.0 KB )  34.2%  
+        FLASH 1                           [0x08000000 | 0x00080000 (524288)]
+                ER_IROM1                  [0x08000000]|¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö¡ö_________________| (  21.6 KB /  32.0 KB )  67.7%  
  
-[htm file path] c:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\Objects\template.htm
+LR$$.ARM.__AT_0x2001FFFC
+        RAM 1                             [0x20000000 | 0x00020000 (131072)]
+                [zi start] 0   [zi end] 50
+                ER$$.ARM.__AT_0x2001FFFC  [0x2001FFFC]|¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ¡õ| (        4 /        4 ) 100.0%  
+ 
+ 
+[htm file path] C:\Users\32000\Desktop\workspace\Lx\11Class_OTA\Bootloader\stm32f4x1_template\MDK-ARM\Objects\template.htm
 Maximum Stack Usage =       4440 bytes + Unknown(Cycles, Untraceable Function Pointers)
  
 =============================================================================================================================
 
-run time: 0.122 s
+run time: 0.145 s

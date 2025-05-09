@@ -41,7 +41,8 @@ void jump_to_app(void)
   if(((*(__IO uint32_t *)ApplicationAddress) & 0x2FFE0000) == 0x20000000)
   {
     //恢复默认
-    USART_DeInit(USART1);
+    // key deinit
+    RCC_DeInit();
     /* 屏蔽所有中断，防止在跳转过程中，中断干扰出现异常 */
     __disable_irq();
 

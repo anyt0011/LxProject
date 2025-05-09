@@ -12,8 +12,7 @@ LR_IROM1 0x08000000 0x00008000  {    ; load region size_region
   RW_IRAM1 0x20000000 0x0001FFFC  {  ; RW data
    .ANY (+RW +ZI)
   }
-  RW_IRAM2 0x2001FFFC UNINIT 0x00000004  {
-   .ANY (+RW +ZI)
-  }
+;  RW_IRAM2 0x2001FFFC UNINIT 0x00000004  {
+;   *.o (noinit)
+;  }
 }
-
