@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include "elog.h"
 #include "semphr.h"
+#include "AHT21.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,6 +67,7 @@ const osThreadAttr_t appTask_attributes = {
 /* USER CODE BEGIN FunctionPrototypes */
 void AppTask(void *arg);
 void fault_test_by_div0(void);
+void bsp_for_aht21_function(void const * argument);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -127,10 +129,10 @@ void StartDefaultTask(void *argument)
   elog_i(TAG,"hello world");
   for(;;)
   {
-    elog_i(TAG,"default task");
-    elog_raw("Task '%s' Stack High Water Mark: %u words\n", 
-          pcTaskGetName(NULL), 
-          uxTaskGetStackHighWaterMark(NULL));
+//    elog_i(TAG,"default task");
+//    elog_raw("Task '%s' Stack High Water Mark: %u words\n", 
+//          pcTaskGetName(NULL), 
+//          uxTaskGetStackHighWaterMark(NULL));
 
     osDelay(1500);
   }
@@ -139,10 +141,29 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+void bsp_for_aht21_function(void const * argument)
+{
+  /* USER CODE BEGIN bsp_for_aht21_function */
+  /* Infinite loop */
+	static const char* TAG = "app";
+	osDelay(500);
+	AHT_Init();
+	float humidity = 0;
+	float temperature = 0;
+  for(;;)
+  {
+		AHT_Read(&humidity,&temperature);
+		elog_i(TAG,"\nthe temperature = [%f],\r\n"
+					 "the humidity   = [%f]\r\n",temperature,humidity);
+    osDelay(500);
+  }
+  /* USER CODE END bsp_for_aht21_function */
+}
 void AppTask(void *arg)
 {
 	static const char* TAG = "app";
   elog_i(TAG,"hello world");
+	bsp_for_aht21_function(NULL);
   for(;;)
   {
     elog_i(TAG,"app task");

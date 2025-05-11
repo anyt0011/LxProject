@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F411xE,USE_FULL_ASSERT</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\BSP\rtc;..\Components\easylogger\inc;..\Components\segger_rtt_v784f\Config;..\Components\segger_rtt_v784f\RTT;..\Components\bcd_hex_converter;..\Components\cmbacktrace;..\Components\cmbacktrace\Languages\en-US;..\Components\cmbacktrace\Languages\zh-CN;..\Components\systemview\Config;..\Components\systemview\SEGGER;..\Components\systemview\Sample\FreeRTOSV10</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\BSP\rtc;..\Components\easylogger\inc;..\Components\segger_rtt_v784f\Config;..\Components\segger_rtt_v784f\RTT;..\Components\bcd_hex_converter;..\Components\cmbacktrace;..\Components\cmbacktrace\Languages\en-US;..\Components\cmbacktrace\Languages\zh-CN;..\Components\systemview\Config;..\Components\systemview\SEGGER;..\Components\systemview\Sample\FreeRTOSV10;..\BSP\aht21\hal_driver;..\Core\Delay;..\Core\IIC;..\BSP\aht21</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -433,6 +433,16 @@
               <FileName>stm32f4xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_timebase_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>iic_hal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\IIC\iic_hal.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Delay\delay.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -691,6 +701,16 @@
               <FileName>bsp_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\BSP\rtc\bsp_rtc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP/AHT21</GroupName>
+          <Files>
+            <File>
+              <FileName>AHT21.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\aht21\AHT21.c</FilePath>
             </File>
           </Files>
         </Group>
