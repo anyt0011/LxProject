@@ -109,13 +109,18 @@ typedef struct
 {
     iic_driver_interface_t *p_iic_driver_instance;
     timebase_interface_t   *p_timebase_instance;
-    yield_interface_t      *p_yield_instance;
-
+#ifdef OS_SUPPORTING
+    yield_interface_t *p_yield_instance;
+#endif // End of OS_SUPPORTING
     aht21_status_t (*pf_inst)(
         void *const                   paht21_instance,
         iic_driver_interface_t *const piic_driver_instance,
-        timebase_interface_t *const   ptimebase_instance,
-        yield_interface_t *const      pyield_instance);
+        timebase_interface_t *const   ptimebase_instance
+#ifdef OS_SUPPORTING
+        ,
+        yield_interface_t *const pyield_instance
+#endif // End of OS_SUPPORTING
+    );
 
     aht21_status_t (*pf_init)(void *const);          /*  AHT21 init function */
     aht21_status_t (*pf_deinit)(void *const);        /*AHT21 deinit function */
